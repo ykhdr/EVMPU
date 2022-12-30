@@ -4,19 +4,19 @@
 #include <stdlib.h>
 #include <xmmintrin.h>
 
-#define N 2028  // размерность матрицы
-#define M 10 // количество членов ряда (итераций)
+#define N 2028  // СЂР°Р·РјРµСЂРЅРѕСЃС‚СЊ РјР°С‚СЂРёС†С‹
+#define M 10 // РєРѕР»РёС‡РµСЃС‚РІРѕ С‡Р»РµРЅРѕРІ СЂСЏРґР° (РёС‚РµСЂР°С†РёР№)
 
 void matrixSum(const float* first, const float* second, float* result) {
-    __m128 sum; // векторные локальные переменные для хранения 4 float (сумма)
-    __m128* AA; // и BB для взяти 4 элементов floay
+    __m128 sum; // РІРµРєС‚РѕСЂРЅС‹Рµ Р»РѕРєР°Р»СЊРЅС‹Рµ РїРµСЂРµРјРµРЅРЅС‹Рµ РґР»СЏ С…СЂР°РЅРµРЅРёСЏ 4 float (СЃСѓРјРјР°)
+    __m128* AA; // Рё BB РґР»СЏ РІР·СЏС‚Рё 4 СЌР»РµРјРµРЅС‚РѕРІ floay
     __m128* BB;
     for (int i = 0; i < N; ++i) {
-        AA = (__m128*)(first + i * N); // берем указатели на i-тую строку
+        AA = (__m128*)(first + i * N); // Р±РµСЂРµРј СѓРєР°Р·Р°С‚РµР»Рё РЅР° i-С‚СѓСЋ СЃС‚СЂРѕРєСѓ
         BB = (__m128*)(second + i * N);
-        for (int j = 0; j < N / 4; ++j) { // так как складываем сразу по 4 значения, то N/4
-            sum = _mm_add_ps(AA[j], BB[j]); // складываем
-            _mm_store_ps((result + i * N + j * 4), sum); // загружаем в res на нужное место sum сразу по 4
+        for (int j = 0; j < N / 4; ++j) { // С‚Р°Рє РєР°Рє СЃРєР»Р°РґС‹РІР°РµРј СЃСЂР°Р·Сѓ РїРѕ 4 Р·РЅР°С‡РµРЅРёСЏ, С‚Рѕ N/4
+            sum = _mm_add_ps(AA[j], BB[j]); // СЃРєР»Р°РґС‹РІР°РµРј
+            _mm_store_ps((result + i * N + j * 4), sum); // Р·Р°РіСЂСѓР¶Р°РµРј РІ res РЅР° РЅСѓР¶РЅРѕРµ РјРµСЃС‚Рѕ sum СЃСЂР°Р·Сѓ РїРѕ 4
         }
     }
 }
@@ -26,11 +26,11 @@ void matrixSub(const float* first, const float* second, float* result) {
     __m128* AA;
     __m128* BB;
     for (int i = 0; i < N; ++i) {
-        AA = (__m128*)(first + i * N); // берем указатели на i-тую строку
+        AA = (__m128*)(first + i * N); // Р±РµСЂРµРј СѓРєР°Р·Р°С‚РµР»Рё РЅР° i-С‚СѓСЋ СЃС‚СЂРѕРєСѓ
         BB = (__m128*)(second + i * N);
         for (int j = 0; j < N / 4; ++j) {
-            sub = _mm_sub_ps(AA[j], BB[j]); // вычитаем
-            _mm_store_ps(result + i * N + j * 4, sub); // складываем
+            sub = _mm_sub_ps(AA[j], BB[j]); // РІС‹С‡РёС‚Р°РµРј
+            _mm_store_ps(result + i * N + j * 4, sub); // СЃРєР»Р°РґС‹РІР°РµРј
         }
     }
 }
@@ -39,14 +39,14 @@ void matrixMult(const float* first, const float* second, float* result) {
     __m128 line, column, temp, sum;
     for (int i = 0; i < N; ++i) {
         for (int j = 0; j < N; j += 4) {
-            sum = _mm_setzero_ps(); // зануляем сумму
+            sum = _mm_setzero_ps(); // Р·Р°РЅСѓР»СЏРµРј СЃСѓРјРјСѓ
             for (int k = 0; k < N; ++k) {
-                column = _mm_set1_ps(first[i * N + k]); // берем столбец первого
-                line = _mm_load_ps(second + k * N + j); // берем значения строки второго
-                temp = _mm_mul_ps(column, line); // умножаем их
-                sum = _mm_add_ps(sum, temp); // слкадываем и присваиваем в сумм
+                column = _mm_set1_ps(first[i * N + k]); // Р±РµСЂРµРј СЃС‚РѕР»Р±РµС† РїРµСЂРІРѕРіРѕ
+                line = _mm_load_ps(second + k * N + j); // Р±РµСЂРµРј Р·РЅР°С‡РµРЅРёСЏ СЃС‚СЂРѕРєРё РІС‚РѕСЂРѕРіРѕ
+                temp = _mm_mul_ps(column, line); // СѓРјРЅРѕР¶Р°РµРј РёС…
+                sum = _mm_add_ps(sum, temp); // СЃР»РєР°РґС‹РІР°РµРј Рё РїСЂРёСЃРІР°РёРІР°РµРј РІ СЃСѓРјРј
             }
-            _mm_store_ps(result + i * N + j, sum); // загруажем в result
+            _mm_store_ps(result + i * N + j, sum); // Р·Р°РіСЂСѓР°Р¶РµРј РІ result
         }
     }
 }
@@ -95,20 +95,20 @@ void AMatrixFill(float *A)
 }
 
 float* invertMatrix(float* A) {
-    float* B = (float*)malloc(N*N*sizeof(float)); // A(т) / a_1 * a_inf
-    float* I = (float*)malloc(N*N*sizeof(float)); // единичная матрица
+    float* B = (float*)malloc(N*N*sizeof(float)); // A(С‚) / a_1 * a_inf
+    float* I = (float*)malloc(N*N*sizeof(float)); // РµРґРёРЅРёС‡РЅР°СЏ РјР°С‚СЂРёС†Р°
     float* BA = (float*)malloc(N*N*sizeof(float)); // B * A
     float* R = (float*)malloc(N*N*sizeof(float)); // I - BA
     float* buf = (float*)malloc(N*N*sizeof(float)); // buffer
     float* res = (float*)malloc(N*N*sizeof(float)); // result
 
-    // макс. сумма по столбцам и строкам
+    // РјР°РєСЃ. СЃСѓРјРјР° РїРѕ СЃС‚РѕР»Р±С†Р°Рј Рё СЃС‚СЂРѕРєР°Рј
     float a_1 = A_1(A);
     float a_inf = A_inf(A);
 
-    // заполнение единичной матрицы
+    // Р·Р°РїРѕР»РЅРµРЅРёРµ РµРґРёРЅРёС‡РЅРѕР№ РјР°С‚СЂРёС†С‹
     IMatrixFill(I);
-    IMatrixFill(buf); // тоже единичная, чтобы с ней нормально работали операции
+    IMatrixFill(buf); // С‚РѕР¶Рµ РµРґРёРЅРёС‡РЅР°СЏ, С‡С‚РѕР±С‹ СЃ РЅРµР№ РЅРѕСЂРјР°Р»СЊРЅРѕ СЂР°Р±РѕС‚Р°Р»Рё РѕРїРµСЂР°С†РёРё
 
     // B
     for (int i = 0; i < N; ++i) {

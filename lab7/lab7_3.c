@@ -10,8 +10,8 @@
 #include <mkl.h>
 #endif
 
-#define N 2048  // размерность матрицы
-#define M 10 // количество членов ряда (итераций)
+#define N 2048  // СЂР°Р·РјРµСЂРЅРѕСЃС‚СЊ РјР°С‚СЂРёС†С‹
+#define M 10 // РєРѕР»РёС‡РµСЃС‚РІРѕ С‡Р»РµРЅРѕРІ СЂСЏРґР° (РёС‚РµСЂР°С†РёР№)
 
 float A_1(float* A) {
     float max = 0, tmp = 0;
@@ -54,7 +54,7 @@ void AMatrixFill(float *A){
 }
 
 float* invertMatrix(float* A) {
-    float* I = (float*)malloc(N * N *sizeof(float)); // единичная матрица
+    float* I = (float*)malloc(N * N *sizeof(float)); // РµРґРёРЅРёС‡РЅР°СЏ РјР°С‚СЂРёС†Р°
     float* R = (float*)malloc(N * N *sizeof(float)); // I - BA
     float* tmp1 =  (float*)malloc(N * N *sizeof(float));
     float* tmp2 =  (float*)malloc(N * N *sizeof(float));
@@ -62,11 +62,11 @@ float* invertMatrix(float* A) {
     float* BA = (float*)malloc(N*N*sizeof(float));
     float* res = (float*)malloc(N*N*sizeof(float)); // result 
     float* tmp3 = (float*)malloc(N*N*sizeof(float)); // result 
-    // макс. сумма по столбцам и строкам
+    // РјР°РєСЃ. СЃСѓРјРјР° РїРѕ СЃС‚РѕР»Р±С†Р°Рј Рё СЃС‚СЂРѕРєР°Рј
     float a_1 = A_1(A);
     float a_inf = A_inf(A);
 
-    // заполнение единичной матрицы
+    // Р·Р°РїРѕР»РЅРµРЅРёРµ РµРґРёРЅРёС‡РЅРѕР№ РјР°С‚СЂРёС†С‹
     IMatrixFill(I);
     IMatrixFill(R);
     IMatrixFill(res);
@@ -83,32 +83,30 @@ float* invertMatrix(float* A) {
     }
 
 
-     // clbas_sgemm - вычислияет C = \alpha AB + \beta C, s - вещ тип один точности
-    // 1) - порядок следования элементов: CblasRowMajor - матрицы хранятся по строкам
-    // 2,3) - предварительные операции: CblasNoTrans - ничего не делать,  CblasTrans - транспонировать (A, B ) соответсвтенно
-    // 4,5,6) - размеры матриц 
-    // 7) - коэф alpha 
-    // 8) - матрица A
-    // 9) - число элементов в строке матрицы A 
-    // 10) - матрица B
-    // 11) - число элементов в строке матрицы B
-    // 12) - кэф beta 
-    // 13) - матрица C
-    // 14) - число эл в строке матрицы C
+     // clbas_sgemm - РІС‹С‡РёСЃР»РёСЏРµС‚ C = \alpha AB + \beta C, s - РІРµС‰ С‚РёРї РѕРґРёРЅ С‚РѕС‡РЅРѕСЃС‚Рё
+    // 1) - РїРѕСЂСЏРґРѕРє СЃР»РµРґРѕРІР°РЅРёСЏ СЌР»РµРјРµРЅС‚РѕРІ: CblasRowMajor - РјР°С‚СЂРёС†С‹ С…СЂР°РЅСЏС‚СЃСЏ РїРѕ СЃС‚СЂРѕРєР°Рј
+    // 2,3) - РїСЂРµРґРІР°СЂРёС‚РµР»СЊРЅС‹Рµ РѕРїРµСЂР°С†РёРё: CblasNoTrans - РЅРёС‡РµРіРѕ РЅРµ РґРµР»Р°С‚СЊ,  CblasTrans - С‚СЂР°РЅСЃРїРѕРЅРёСЂРѕРІР°С‚СЊ (A, B ) СЃРѕРѕС‚РІРµС‚СЃРІС‚РµРЅРЅРѕ
+    // 4,5,6) - СЂР°Р·РјРµСЂС‹ РјР°С‚СЂРёС† 
+    // 7) - РєРѕСЌС„ alpha 
+    // 8) - РјР°С‚СЂРёС†Р° A
+    // 9) - С‡РёСЃР»Рѕ СЌР»РµРјРµРЅС‚РѕРІ РІ СЃС‚СЂРѕРєРµ РјР°С‚СЂРёС†С‹ A 
+    // 10) - РјР°С‚СЂРёС†Р° B
+    // 11) - С‡РёСЃР»Рѕ СЌР»РµРјРµРЅС‚РѕРІ РІ СЃС‚СЂРѕРєРµ РјР°С‚СЂРёС†С‹ B
+    // 12) - РєСЌС„ beta 
+    // 13) - РјР°С‚СЂРёС†Р° C
+    // 14) - С‡РёСЃР»Рѕ СЌР» РІ СЃС‚СЂРѕРєРµ РјР°С‚СЂРёС†С‹ C
 
-    // считаем матрицу B
+    // СЃС‡РёС‚Р°РµРј РјР°С‚СЂРёС†Сѓ B
     cblas_sgemm(CblasRowMajor, CblasTrans, CblasNoTrans, N, N, N, 1.0 / (a_1 * a_inf), A, N, I, N, 0.0, B, N);
 
-    // считаем матрицу BA
+    // СЃС‡РёС‚Р°РµРј РјР°С‚СЂРёС†Сѓ BA
     cblas_sgemm(CblasRowMajor, CblasNoTrans, CblasNoTrans, N, N, N, 1.0, B, N, A, N, 0.0, BA, N);
 
-    // считаем матррицу R
+    // СЃС‡РёС‚Р°РµРј РјР°С‚СЂСЂРёС†Сѓ R
     cblas_sgemm(CblasRowMajor, CblasNoTrans, CblasNoTrans, N, N, N, -1.0, BA, N, I, N, 1.0, R, N);
 
-
-
     for (int k = 0; k < M - 1; ++k) {
-        // умножаем матрицы, получаем tmp2 = R^n
+        // СѓРјРЅРѕР¶Р°РµРј РјР°С‚СЂРёС†С‹, РїРѕР»СѓС‡Р°РµРј tmp2 = R^n
         cblas_sgemm(CblasRowMajor, CblasNoTrans, CblasNoTrans, N, N, N, 1.0, tmp1, N, R, N, 0.0, tmp2, N);
         // tmp1 = I* tmp2
         cblas_sgemm(CblasRowMajor, CblasNoTrans, CblasNoTrans, N, N, N, 1.0, I, N, tmp2, N, 0.0, tmp1, N);
@@ -118,17 +116,8 @@ float* invertMatrix(float* A) {
     // tmp3 = tmp3 + I
     cblas_sgemm(CblasRowMajor, CblasNoTrans, CblasNoTrans, N, N, N, 1.0, I, N, I, N, 1.0, tmp3, N);
 
-    // res = res*B
+    // res = tmp3*B
     cblas_sgemm(CblasRowMajor, CblasNoTrans, CblasNoTrans, N, N, N, 1.0, tmp3, N, B, N, 0.0, res, N);
-
-/*
-for (size_t i = 0; i < N; ++i) {
-        for (size_t j = 0; j < N; ++j) {
-             printf("%f ",tmp3[i * N + j]);
-        }
-        printf("\n");
-    }
-*/
 
     free(tmp1);
     free(tmp2);
@@ -160,16 +149,7 @@ int main()
     cblas_sgemm(CblasRowMajor, CblasNoTrans, CblasNoTrans, N, N, N, 1.0, Inv, N, A, N, 0.0, res, N);
 
 
-  /*  
- for (size_t i = 0; i < N; ++i) {
-        for (size_t j = 0; j < N; ++j) {
-             printf("%f ",res[i * N + j]);
-        }
-        printf("\n");
-    }
-*/
-
-    printf("norma 1: %f, norma inf: %f\n",A_1(res),A_inf(res));
+    printf("norma 1: %f, norma inf: %f",A_1(res),A_inf(res));
 
     printf("Time of program with BLASS library : %f seconds\n", (double)(end.tv_sec-start.tv_sec) + 0.000000001*(double)(end.tv_nsec-start.tv_nsec));
     

@@ -4,8 +4,8 @@
 #include <math.h>
 #include <time.h>
 
- #define N 2028// размерность матрицы
- #define M 10// количество членов ряда (итераций)
+ #define N 2028// СЂР°Р·РјРµСЂРЅРѕСЃС‚СЊ РјР°С‚СЂРёС†С‹
+ #define M 10// РєРѕР»РёС‡РµСЃС‚РІРѕ С‡Р»РµРЅРѕРІ СЂСЏРґР° (РёС‚РµСЂР°С†РёР№)
 
 void matrixSum(float *first, float *second, float *result)
 {
@@ -46,7 +46,7 @@ void matrixMult(float *first, float *second, float *result)
 
 
 float A_1(float *A)
-{ // считаем сумма модулей всех a_i по строке и выбираем max
+{ // СЃС‡РёС‚Р°РµРј СЃСѓРјРјР° РјРѕРґСѓР»РµР№ РІСЃРµС… a_i РїРѕ СЃС‚СЂРѕРєРµ Рё РІС‹Р±РёСЂР°РµРј max
     float max = 0, tmp = 0;
     for (int i = 0; i < N; ++i)
     {
@@ -62,7 +62,7 @@ float A_1(float *A)
 }
 
 float A_inf(float *A)
-{ // считаем сумму модулей всех a_i о столбцам и выбираем max
+{ // СЃС‡РёС‚Р°РµРј СЃСѓРјРјСѓ РјРѕРґСѓР»РµР№ РІСЃРµС… a_i Рѕ СЃС‚РѕР»Р±С†Р°Рј Рё РІС‹Р±РёСЂР°РµРј max
     float max = 0, tmp = 0;
     for (int i = 0; i < N; ++i)
     {
@@ -89,7 +89,7 @@ void AMatrixFill(float *A)
 }
 
 void IMatrixFill(float *I)
-{ // заполняем единичную матрицу
+{ // Р·Р°РїРѕР»РЅСЏРµРј РµРґРёРЅРёС‡РЅСѓСЋ РјР°С‚СЂРёС†Сѓ
     for (size_t i = 0; i < N; ++i)
     {
         for (size_t j = 0; j < N; ++j)
@@ -101,8 +101,8 @@ void IMatrixFill(float *I)
 
 float *invertMatrix(float *A)
 {
-    float *B = (float*)malloc(N*N*sizeof(float)); // A(т) / a_1 * a_inf, где a_1 - норма матрицы 1, a_inf -  норма матрицы беск
-    float *I = (float*)malloc(N*N*sizeof(float)); // единичная матрица
+    float *B = (float*)malloc(N*N*sizeof(float)); // A(С‚) / a_1 * a_inf, РіРґРµ a_1 - РЅРѕСЂРјР° РјР°С‚СЂРёС†С‹ 1, a_inf -  РЅРѕСЂРјР° РјР°С‚СЂРёС†С‹ Р±РµСЃРє
+    float *I = (float*)malloc(N*N*sizeof(float)); // РµРґРёРЅРёС‡РЅР°СЏ РјР°С‚СЂРёС†Р°
     float *BA = (float*)malloc(N*N*sizeof(float)); // B * A
     float *R = (float*)malloc(N*N*sizeof(float)); // I - BA
     float *buf = (float*)malloc(N*N*sizeof(float)); // buffer
@@ -174,10 +174,10 @@ int main()
 //        std::cout << std::endl;
 //    }
 
-	float *res = (float*)malloc(N*N*sizeof(float)); // result
+    float *res = (float*)malloc(N*N*sizeof(float)); // result
     matrixMult(A,Inv,res);
 
-    printf("норма 1: %f, норма inf: %f",A_1(res),A_inf(res));
+    printf("РЅРѕСЂРјР° 1: %f, РЅРѕСЂРјР° inf: %f",A_1(res),A_inf(res));
 
     
     printf("Time of program without manual vectorization: %f seconds \n",(double)(end.tv_sec-start.tv_sec) + 0.000000001*(double)(end.tv_nsec-start.tv_nsec)); 
